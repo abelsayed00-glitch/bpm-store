@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BPM Store</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#25313E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="BPM Store">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600&display=swap">
+<style>
+:root{
+  --bg:#F1F3F6; --surface:#FFFFFF; --ink:#1E2A35; --muted:#5F6B78; --line:#C5CDD6;
+  --slate:#3B4A5A; --on-slate:#FFFFFF; --accent:#1D5FA6; --on-accent:#FFFFFF; --bad:#AF281F;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-disp:"IBM Plex Sans Condensed","IBM Plex Sans","Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#10151A; --surface:#19212A; --ink:#E3E9EE; --muted:#9AA7B4; --line:#344250;
+         --slate:#25313E; --on-slate:#F1F4F7; --accent:#6BA9EC; --on-accent:#0A1520; --bad:#F28C82; color-scheme:dark; }
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 var(--f-body)}
+.bar{background:var(--slate);color:var(--on-slate);font:600 17px var(--f-disp);letter-spacing:.02em;
+     padding:max(12px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 12px max(16px,env(safe-area-inset-left))}
+main{padding:0 max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left))}
+.login{max-width:360px;margin:32px auto;background:var(--surface);border:1px solid var(--line);border-radius:16px;
+       padding:22px;display:flex;flex-direction:column;gap:12px}
+h1{margin:0;font:600 24px var(--f-disp)}
+label{font-size:14px;color:var(--muted)}
+input{width:100%;font:500 22px var(--f-body);letter-spacing:.2em;padding:12px 14px;border:1px solid var(--line);
+      border-radius:10px;background:var(--bg);color:var(--ink)}
+input:focus{outline:2px solid var(--accent);outline-offset:1px}
+button{font:600 17px var(--f-body);padding:13px;border:0;border-radius:10px;background:var(--accent);color:var(--on-accent);cursor:pointer}
+button:disabled{opacity:.6;cursor:wait}
+.err{min-height:1.4em;margin:0;color:var(--bad);font-size:15px}
+</style>
+</head>
+<body>
+<div class="bar">BPM Store</div>
+<main>
+<form class="login" id="f">
+  <h1>BPM Store</h1>
+  <label for="pin">Your PIN</label>
+  <input id="pin" type="password" inputmode="numeric" autocomplete="current-password" required autofocus>
+  <button id="go">Sign in</button>
+  <p class="err" id="err" role="alert"></p>
+</form>
+</main>
+<script>
+/* The sign-in page of the BPM Store screens. Nothing else lives here: with a right PIN the server sends the screens
+   and their data, and this page becomes them. */
+(function () {
+  var API = 'https://script.google.com/macros/s/AKfycbz7oqN-aAEzInkasWqoGzaSNCtrvrLb8HEt8wZb7EKdMxQirhpWPep8lUeRDIWBXMHn/exec';
+  /* Kept on the screens after sign-in, so the tab keeps its icon and the phone can still add it to the home screen. */
+  var HEAD = '<link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" href="icon-192.png">' +
+             '<link rel="apple-touch-icon" href="icon-192.png"><meta name="theme-color" content="#25313E">';
+  var form = document.getElementById('f'), btn = document.getElementById('go'), err = document.getElementById('err');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var pin = document.getElementById('pin').value.trim();
+    if (!pin) return;
+    btn.disabled = true; btn.textContent = 'Signing in…'; err.textContent = '';
+    fetch(API, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({ui: 'app', pin: pin})})
+      .then(function (r) { return r.json(); })
+      .then(function (r) {
+        if (!r || !r.ok || !r.html) throw new Error((r && r.error) || 'Could not sign in.');
+        window.__BPM_API = API;
+        window.__BPM_BOOT = {pin: pin, user: r.user, data: r.data};
+        document.open(); document.write(r.html.replace(/<head>/i, '<head>' + HEAD)); document.close();
+      })
+      .catch(function (e) {
+        btn.disabled = false; btn.textContent = 'Sign in';
+        err.textContent = e instanceof TypeError ? 'No connection. Check the internet and try again.' : (e.message || 'Could not sign in.');
+      });
+  });
+})();
+</script>
+</body>
+</html>
