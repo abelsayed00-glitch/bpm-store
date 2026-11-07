@@ -68,12 +68,16 @@ button:disabled{opacity:.6;cursor:wait}
     var pin = document.getElementById('pin').value.trim();
     if (!pin) return;
     btn.disabled = true; btn.textContent = 'Signing in…'; err.textContent = '';
-    fetch(API, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({ui: 'app', pin: pin})})
+    var dev = '';
+    try { dev = localStorage.getItem('bpmDev') || ''; } catch (x) {}
+    fetch(API, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({ui: 'app', pin: pin, dev: dev})})
       .then(function (r) { return r.json(); })
       .then(function (r) {
         if (!r || !r.ok || !r.html) throw new Error((r && r.error) || 'Could not sign in.');
+        /* this phone's key from the server: a stranger's wrong PINs never lock a phone that has signed in before */
+        if (r.dev) { try { localStorage.setItem('bpmDev', r.dev); } catch (x) {} }
         window.__BPM_API = API;
-        window.__BPM_BOOT = {pin: pin, user: r.user, data: r.data};
+        window.__BPM_BOOT = {pin: pin, user: r.user, data: r.data, dev: r.dev || dev};
         document.open(); document.write(r.html.replace(/<head>/i, '<head>' + HEAD)); document.close();
       })
       .catch(function (e) {
