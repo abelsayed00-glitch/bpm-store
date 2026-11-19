@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-pal="a">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -8,80 +8,108 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
-<meta name="theme-color" content="#25313E">
+<meta name="theme-color" content="#000000">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="BPM Store">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap">
+<script>
+/* The theme this device picked on the screens (decision 162): A black and gold unless it chose another. */
+(function () { var v = 'a'; try { v = localStorage.getItem('bpmTheme') || 'a'; } catch (x) {}
+  var h = document.documentElement, c = {a:'#000000', b:'#070D1C', c:'#04100F', l:'#25313E'}[v] ? v : 'a';
+  if (c === 'l') { h.removeAttribute('data-pal'); h.setAttribute('data-theme', 'light'); } else h.setAttribute('data-pal', c);
+  document.querySelector('meta[name="theme-color"]').setAttribute('content', {a:'#000000', b:'#070D1C', c:'#04100F', l:'#25313E'}[c]); })();
+</script>
 <style>
-:root{
-  --bg:#F1F3F6; --surface:#FFFFFF; --ink:#1E2A35; --muted:#5F6B78; --line:#C5CDD6;
-  --slate:#3B4A5A; --on-slate:#FFFFFF; --accent:#1D5FA6; --on-accent:#FFFFFF; --bad:#AF281F;
-  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --f-disp:"IBM Plex Sans Condensed","IBM Plex Sans","Segoe UI",sans-serif;
-}
-@media (prefers-color-scheme: dark){
-  :root{ --bg:#10151A; --surface:#19212A; --ink:#E3E9EE; --muted:#9AA7B4; --line:#344250;
-         --slate:#25313E; --on-slate:#F1F4F7; --accent:#6BA9EC; --on-accent:#0A1520; --bad:#F28C82; color-scheme:dark; }
-}
+:root,:root[data-pal="a"]{color-scheme:dark;--bg:#000000;--surface:#0E0D0C;--raise:#1A1816;--line:#3D372D;--ink:#F1ECE2;--ink-2:#D8D1C4;--muted:#A8A091;--acc:#D9BD7C;--on-acc:#000000;--bad:#F28C82;--bad-soft:#321613;--bad-line:#8A433C}
+:root[data-pal="b"]{--bg:#070D1C;--surface:#0D1730;--raise:#16233F;--line:#32446C;--ink:#EEEDE8;--ink-2:#CED2DD;--muted:#9CA7BF;--acc:#DCBC72;--on-acc:#070D1C}
+:root[data-pal="c"]{--bg:#04100F;--surface:#0A1B19;--raise:#122927;--line:#2E4E4A;--ink:#ECEEE8;--ink-2:#CCD5D0;--muted:#96AAA5;--acc:#D9BD7C;--on-acc:#04100F}
+:root[data-theme="light"]{color-scheme:light;--bg:#EEF1F5;--surface:#FFFFFF;--raise:#F6F8FA;--line:#BFC9D3;--ink:#16202A;--ink-2:#2F3B47;--muted:#56636F;--acc:#16202A;--on-acc:#FFFFFF;--bad:#AF281F;--bad-soft:#FBE9E7;--bad-line:#E3A39C}
+:root{--f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--f-fig:"IBM Plex Sans Condensed","IBM Plex Sans","Segoe UI",sans-serif}
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 var(--f-body)}
-.bar{background:var(--slate);color:var(--on-slate);font:600 17px var(--f-disp);letter-spacing:.02em;
-     padding:max(12px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 12px max(16px,env(safe-area-inset-left))}
-main{padding:0 max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left))}
-.login{max-width:360px;margin:32px auto;background:var(--surface);border:1px solid var(--line);border-radius:16px;
-       padding:22px;display:flex;flex-direction:column;gap:12px}
-h1{margin:0;font:600 24px var(--f-disp)}
-label{font-size:14px;color:var(--muted)}
-input{width:100%;font:500 22px var(--f-body);letter-spacing:.2em;padding:12px 14px;border:1px solid var(--line);
-      border-radius:10px;background:var(--bg);color:var(--ink)}
-input:focus{outline:2px solid var(--accent);outline-offset:1px}
-button{font:600 17px var(--f-body);padding:13px;border:0;border-radius:10px;background:var(--accent);color:var(--on-accent);cursor:pointer}
-button:disabled{opacity:.6;cursor:wait}
-.err{min-height:1.4em;margin:0;color:var(--bad);font-size:15px}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 var(--f-body);-webkit-font-smoothing:antialiased}
+::selection{background:var(--acc);color:var(--on-acc)}
+main{min-height:100vh;padding:max(24px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 32px max(16px,env(safe-area-inset-left))}
+.signbox{max-width:412px;margin:6vh auto 0;padding:30px 26px 26px;text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:26px}
+.brand{display:flex;align-items:center;justify-content:center;gap:10px;font:600 26px var(--f-fig);letter-spacing:.01em}
+.brand svg{width:30px;height:30px;color:var(--acc)}
+svg.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+h1{margin:30px 0 0;font:600 26px var(--f-fig)}
+p.note{color:var(--muted);font-size:15.5px;margin:8px 0 0}
+#pin{display:block;width:100%;margin:20px 0 22px;padding:6px 0 10px;background:none;border:0;border-bottom:2px solid var(--line);border-radius:0;text-align:center;font:500 32px var(--f-fig);letter-spacing:.5em;color:var(--ink);caret-color:var(--acc)}
+#pin:focus{outline:none;border-bottom-color:var(--acc)}
+#pin::placeholder{letter-spacing:.08em;font-size:20px;color:var(--muted)}
+.keys{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.keys button{height:72px;border-radius:16px;background:var(--raise);border:1px solid var(--line);display:grid;place-items:center;font:500 30px var(--f-fig);color:var(--ink);cursor:pointer}
+.keys button:hover{border-color:var(--acc)}
+.keys button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.keys button svg{width:26px;height:26px;color:var(--ink-2)}
+.keys .go{background:var(--acc);border-color:var(--acc)}
+.keys .go svg{color:var(--on-acc)}
+.keys .go:disabled{opacity:.6;cursor:wait}
+.err{margin:16px 0 0;text-align:left;background:var(--bad-soft);border:1px solid var(--bad-line);border-radius:12px;padding:12px 14px;font-size:16px}
+.err:empty{display:none}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:759px){ .signbox{margin-top:3vh;border:0;background:none;padding:20px 8px} }
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
 </style>
 </head>
 <body>
-<div class="bar">BPM Store</div>
 <main>
-<form class="login" id="f">
-  <h1>BPM Store</h1>
-  <label for="pin">Your PIN</label>
-  <input id="pin" type="password" inputmode="numeric" autocomplete="current-password" required autofocus>
-  <button id="go">Sign in</button>
+<form class="signbox" id="f">
+  <div class="brand"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"/><path d="m7 16.5-4.74-2.85"/><path d="m7 16.5 5-3"/><path d="M7 16.5v5.17"/><path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"/><path d="m17 16.5-5-3"/><path d="m17 16.5 4.74-2.85"/><path d="M17 16.5v5.17"/><path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"/><path d="M12 8 7.26 5.15"/><path d="m12 8 4.74-2.85"/><path d="M12 13.5V8"/></svg><b>BPM Store</b></div>
+  <h1>Enter your PIN</h1>
+  <p class="note" id="note">Type the PIN you were given.</p>
+  <label for="pin" class="vh">PIN</label>
+  <input id="pin" type="password" inputmode="numeric" autocomplete="current-password" placeholder="PIN" maxlength="12" required autofocus>
+  <div class="keys">
+    <button type="button" data-k="1">1</button><button type="button" data-k="2">2</button><button type="button" data-k="3">3</button>
+    <button type="button" data-k="4">4</button><button type="button" data-k="5">5</button><button type="button" data-k="6">6</button>
+    <button type="button" data-k="7">7</button><button type="button" data-k="8">8</button><button type="button" data-k="9">9</button>
+    <button type="button" data-k="del" aria-label="Delete"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5a2 2 0 0 0-1.344.519l-6.328 5.74a1 1 0 0 0 0 1.481l6.328 5.741A2 2 0 0 0 10 19h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/><path d="m12 9 6 6"/><path d="m18 9-6 6"/></svg></button>
+    <button type="button" data-k="0">0</button>
+    <button type="submit" class="go" id="go" aria-label="Sign in"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg></button>
+  </div>
   <p class="err" id="err" role="alert"></p>
 </form>
 </main>
 <script>
-/* The sign-in page of the BPM Store screens. Nothing else lives here: with a right PIN the server sends the screens
-   and their data, and this page becomes them. */
+/* The sign-in page of the BPM Store screens (picture 11). Nothing else lives here, no name and no figure (decision 133):
+   with a right PIN the server sends the screens and their data, and this page becomes them. */
 (function () {
   var API = 'https://script.google.com/macros/s/AKfycbz7oqN-aAEzInkasWqoGzaSNCtrvrLb8HEt8wZb7EKdMxQirhpWPep8lUeRDIWBXMHn/exec';
   /* Kept on the screens after sign-in, so the tab keeps its icon and the phone can still add it to the home screen. */
   var HEAD = '<link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" href="icon-192.png">' +
-             '<link rel="apple-touch-icon" href="icon-192.png"><meta name="theme-color" content="#25313E">';
-  var form = document.getElementById('f'), btn = document.getElementById('go'), err = document.getElementById('err');
+             '<link rel="apple-touch-icon" href="icon-192.png">';
+  var form = document.getElementById('f'), btn = document.getElementById('go'), err = document.getElementById('err'), pin = document.getElementById('pin');
+  var dev = '';
+  try { dev = localStorage.getItem('bpmDev') || ''; } catch (x) {}
+  if (dev) document.getElementById('note').textContent = 'This phone is known. It signs out by itself at the end of the day.';
+  document.querySelector('.keys').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-k]'); if (!b) return;
+    var k = b.getAttribute('data-k');
+    pin.value = k === 'del' ? pin.value.slice(0, -1) : (pin.value + k).slice(0, 12);
+    err.textContent = '';
+  });
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    var pin = document.getElementById('pin').value.trim();
-    if (!pin) return;
-    btn.disabled = true; btn.textContent = 'Signing in…'; err.textContent = '';
-    var dev = '';
-    try { dev = localStorage.getItem('bpmDev') || ''; } catch (x) {}
-    fetch(API, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({ui: 'app', pin: pin, dev: dev})})
+    var p = pin.value.trim();
+    if (!p) return;
+    btn.disabled = true; err.textContent = '';
+    fetch(API, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({ui: 'app', pin: p, dev: dev})})
       .then(function (r) { return r.json(); })
       .then(function (r) {
         if (!r || !r.ok || !r.html) throw new Error((r && r.error) || 'Could not sign in.');
         /* this phone's key from the server: a stranger's wrong PINs never lock a phone that has signed in before */
         if (r.dev) { try { localStorage.setItem('bpmDev', r.dev); } catch (x) {} }
         window.__BPM_API = API;
-        window.__BPM_BOOT = {pin: pin, user: r.user, data: r.data, dev: r.dev || dev};
+        window.__BPM_BOOT = {pin: p, user: r.user, data: r.data, dev: r.dev || dev};
         document.open(); document.write(r.html.replace(/<head>/i, '<head>' + HEAD)); document.close();
       })
       .catch(function (e) {
-        btn.disabled = false; btn.textContent = 'Sign in';
+        btn.disabled = false;
         err.textContent = e instanceof TypeError ? 'No connection. Check the internet and try again.' : (e.message || 'Could not sign in.');
       });
   });
